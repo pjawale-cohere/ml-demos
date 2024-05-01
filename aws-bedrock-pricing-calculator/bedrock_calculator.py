@@ -1,10 +1,12 @@
 import streamlit as st
 import json
 import tiktoken
+import requests
 
 def load_pricing():
-    with open('/aws-bedrock-pricing-calculator/pricing_data_on_demand_batch.json', 'r') as file:
-        return json.load(file)
+    url = "https://raw.githubusercontent.com/pjawale-cohere/ml-demos/main/aws-bedrock-pricing-calculator/pricing_data_on_demand_batch.json"
+    response = requests.get(url)
+    return response.json()
 
 def format_currency(value):
     return "${:,.4f}".format(value)
