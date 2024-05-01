@@ -2,6 +2,7 @@ import streamlit as st
 import json
 import tiktoken
 import requests
+import urllib.parse
 
 def load_pricing():
     url = "https://raw.githubusercontent.com/pjawale-cohere/ml-demos/main/aws-bedrock-pricing-calculator/pricing_data_on_demand_batch.json"
@@ -71,7 +72,13 @@ def main():
                 st.success(f"Monthly Cost: {format_currency(monthly_cost)}")
 
             # Add a "Share" button
-            share_url = f"https://aws-bedrock-pricing-calculator.com?model_type={model_type}&input_tokens={input_tokens}&output_tokens={output_tokens}&number_of_calls={number_of_calls}"
+            params = {
+                "model_type": model_type,
+                "input_tokens": input_tokens,
+                "output_tokens": output_tokens,
+                "number_of_calls": number_of_calls
+            }
+            share_url = f"https://bedrock-budgeter.streamlit.app/?{urllib.parse.urlencode(params)}"
             st.markdown(f"<a href='{share_url}' target='_blank'>Share Results</a>", unsafe_allow_html=True)
 
         # Reset button
