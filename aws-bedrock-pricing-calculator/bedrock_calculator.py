@@ -3,7 +3,7 @@ import json
 import tiktoken
 
 def load_pricing():
-    with open('pricing_data_on_demand_batch.json', 'r') as file:
+    with open('/aws-bedrock-pricing-calculator/pricing_data_on_demand_batch.json', 'r') as file:
         return json.load(file)
 
 def format_currency(value):
