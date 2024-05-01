@@ -68,13 +68,13 @@ def main():
 
             input_cost = input_price * (input_tokens / 1000)
             output_cost = output_price * (output_tokens / 1000)
-            # total_cost = input_cost + output_cost
+            total_cost = input_cost + output_cost
             monthly_cost = total_cost * number_of_calls if number_of_calls > 0 else 0
 
             # Display the cost breakdown
             st.success(f"Input Cost: {format_currency(input_cost)}")
             st.success(f"Output Cost: {format_currency(output_cost)}")
-            # st.success(f"Total Cost: {format_currency(total_cost)}")
+            st.success(f"Total Cost: {format_currency(total_cost)}")
             if monthly_cost:
                 st.success(f"Monthly Cost: {format_currency(monthly_cost)}")
 
