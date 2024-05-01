@@ -42,7 +42,15 @@ def main():
         # Pricing Calculator
         st.subheader("Pricing Calculator")
         pricing_data = load_pricing()
-        model_type = st.selectbox("Select Model Type", list(pricing_data.keys()), help="Choose the model type for pricing calculation.")
+
+        # Read URL parameters
+        params = st.experimental_get_query_params()
+        model_type = params.get("model_type", [list(pricing_data.keys())[0]])[0]
+        input_tokens = int(params.get("input_tokens", [0])[0])
+        output_tokens = int(params.get("output_tokens", [0])[0])
+        number_of_calls = int(params.get("number_of_calls", [0])[0])
+
+        model_type = st.selectbox("Select Model Type", list(pricing_data.keys()), index=list(pricing_data.keys()).index(model_type), help="Choose the model type for pricing calculation.")
 
         # Display pricing information
         col1, col2 = st.columns(2)
@@ -51,11 +59,11 @@ def main():
         with col2:
             st.metric("Output Token Price per 1,000", pricing_data[model_type]["Price per 1,000 output tokens"])
 
-        input_tokens = st.number_input("Number of Input Tokens", min_value=0, step=1, help="Provide the number of input tokens.", format="%d")
-        output_tokens = st.number_input("Number of Output Tokens", min_value=0, step=1, help="Provide the number of output tokens.", format="%d")
-        number_of_calls = st.number_input("Estimated Monthly Calls (Optional)", min_value=0, step=1, help="Provide the estimated monthly call volume.", format="%d")
+        input_tokens = st.number_input("Number of Input Tokens", min_value=0, step=1, value=input_tokens, help="Provide the number of input tokens.", format="%d")
+        output_tokens = st.number_input("Number of Output Tokens", min_value=0, step=1, value=output_tokens, help="Provide the number of output tokens.", format="%d")
+        number_of_calls = st.number_input("Estimated Monthly Calls (Optional)", min_value=0, step=1, value=number_of_calls, help="Provide the estimated monthly call volume.", format="%d")
 
-        if st.button("Calculate Cost"):
+        if st.button("Calculate Cost") or params:
             input_price = float(pricing_data[model_type]["Price per 1,000 input tokens"].strip('$'))
             output_price = float(pricing_data[model_type]["Price per 1,000 output tokens"].strip('$'))
 
@@ -83,7 +91,8 @@ def main():
 
         # Reset button
         if st.button("Reset"):
-            st.rerun()
+            st.experimental_set_query_params()
+            st.experimental_rerun()
 
         # Token Estimator
         st.subheader("Token Estimator")
