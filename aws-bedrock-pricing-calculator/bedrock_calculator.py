@@ -1,5 +1,4 @@
 import streamlit as st
-import json
 import tiktoken
 import requests
 import urllib.parse
@@ -59,8 +58,8 @@ def main():
         with col2:
             st.metric("Output Token Price per 1,000", pricing_data[model_type]["Price per 1,000 output tokens"])
 
-        input_tokens = st.number_input("Number of Input Tokens", min_value=0, step=1, value=input_tokens, help="Provide the number of input tokens.", format="%d")
-        output_tokens = st.number_input("Number of Output Tokens", min_value=0, step=1, value=output_tokens, help="Provide the number of output tokens.", format="%d")
+        input_tokens = st.number_input("Number of Input Tokens (per example)", min_value=0, step=1, value=input_tokens, help="Provide the number of input tokens.", format="%d")
+        output_tokens = st.number_input("Number of Output Tokens (per example)", min_value=0, step=1, value=output_tokens, help="Provide the number of output tokens.", format="%d")
         number_of_calls = st.number_input("Estimated Monthly Calls (Optional)", min_value=0, step=1, value=number_of_calls, help="Provide the estimated monthly call volume.", format="%d")
 
         if st.button("Calculate Cost") or params:
@@ -69,13 +68,13 @@ def main():
 
             input_cost = input_price * (input_tokens / 1000)
             output_cost = output_price * (output_tokens / 1000)
-            total_cost = input_cost + output_cost
+            # total_cost = input_cost + output_cost
             monthly_cost = total_cost * number_of_calls if number_of_calls > 0 else 0
 
             # Display the cost breakdown
             st.success(f"Input Cost: {format_currency(input_cost)}")
             st.success(f"Output Cost: {format_currency(output_cost)}")
-            st.success(f"Total Cost: {format_currency(total_cost)}")
+            # st.success(f"Total Cost: {format_currency(total_cost)}")
             if monthly_cost:
                 st.success(f"Monthly Cost: {format_currency(monthly_cost)}")
 
