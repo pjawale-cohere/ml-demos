@@ -1,0 +1,5 @@
+tiktoken
+streamlit
+json
+bs4
+requests
